@@ -3,3 +3,87 @@
     margin: 0;
     box-sizing: border-box;
 }
+
+.icon-btn {
+    transition: 300ms;
+    @apply border rounded-full h-10 w-10 flex justify-center items-center text-gray-400
+}
+
+.icon-btn:hover {
+    @apply border-gray-300 text-gray-600 bg-gray-200
+}
+
+/* Start Article editor styles */
+.toolbar-grid {
+    display: flex;
+    flex-wrap: wrap;
+    flex-basis: 1fr 1fr;
+}
+
+.editor-button {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+    padding: 10px;
+    border: none;
+    background: #fff;
+    cursor: pointer;
+}
+
+.text-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.text-right {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    flex-direction: column;
+}
+
+.text-left {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+}
+
+.header-one {
+    font-size: 40px;
+    font-weight: 600;
+}
+
+.header-two {
+    font-size: 32px;
+    font-weight: 600;
+}
+
+.header-three {
+    font-size: 26px;
+    font-weight: 600;
+}
+
+.header-four {
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.header-five {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.header-six {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.editor-link {
+    color: #0048b4;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    text-decoration: underline;
+}

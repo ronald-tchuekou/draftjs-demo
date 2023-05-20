@@ -1,29 +1,58 @@
-import React from "react"
+import React, {createContext, SetStateAction, useState} from "react"
 import './App.css'
 import 'draft-js/dist/Draft.css';
-import {Editor, EditorState} from "draft-js";
-import EditorToolbar from "./components/editor-toolbar.tsx";
+import HomeScreen from "./screens/home.screen";
+import EditScreen from "./screens/edit.screen";
+import StorageHelper from "./helpers/storage.helper";
+import {RawDraftContentState} from "draft-js";
+
+export enum ScreenStack {
+    HOME = "HomeScreen",
+    EDIT = "EditScreen"
+}
+
+export const ScreenContext = createContext({
+    setScreen: React.Dispatch<SetStateAction<ScreenStack>>
+})
+
+export const StateContext = createContext({
+    refresh: () => undefined
+})
 
 function App() {
+    const [screen, setScreen] = useState<ScreenStack>(ScreenStack.HOME)
+    const [raw, setRaw] = React.useState<RawDraftContentState | null>(
+        null
+    )
 
-    const [editorState, setEditorState] = React.useState<EditorState>(
-        EditorState.createEmpty()
+    /**
+     * To refresh content
+     */
+    const refresh = React.useCallback(
+        () => {
+            setRaw(StorageHelper.getStoredContent())
+            return undefined
+        },
+        [setRaw]
+    )
+
+    React.useEffect(
+        () => {
+            refresh()
+        },
+        []
     )
 
     return (
-        <div className={"w-screen h-screen flex flex-col divide-y"}>
-            <EditorToolbar
-                editorState={editorState}
-                setEditorState={setEditorState}/>
-            <div className={"h-full w-full overflow-y-auto"}>
-                <div className={"p-3"}>
-                    <Editor
-                        placeholder={"Enter something..."}
-                        editorState={editorState}
-                        onChange={setEditorState}/>
-                </div>
-            </div>
-        </div>
+        <ScreenContext.Provider value={{setScreen}}>
+            <StateContext.Provider value={{refresh}}>
+                {
+                    screen === ScreenStack.HOME
+                        ? <HomeScreen raw={raw}/>
+                        : <EditScreen raw={raw}/>
+                }
+            </StateContext.Provider>
+        </ScreenContext.Provider>
     )
 }
 
