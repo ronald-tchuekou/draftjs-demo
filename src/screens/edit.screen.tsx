@@ -1,18 +1,12 @@
 import React from "react"
-import {
-    convertFromRaw,
-    convertToRaw,
-    DraftHandleValue,
-    Editor,
-    EditorState,
-    RawDraftContentState,
-    RichUtils
-} from "draft-js";
+import {convertFromRaw, convertToRaw, DraftHandleValue, EditorState, RawDraftContentState, RichUtils} from "draft-js";
+import Editor from '@draft-js-plugins/editor';
+import createImagePlugin from '@draft-js-plugins/image';
 import {ScreenContext, ScreenStack} from "../App";
 import {faArrowLeft, faSave} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import EditorToolbar from "../components/editor-toolbar";
-import {linkDecorator} from "../components/editor-toolbar/link.decorator";
+import {linkDecorator} from "../components/editor-toolbar/decorators.tsx";
 import StorageHelper from "../helpers/storage.helper";
 import {blockStyleFn, styleMap} from "../helpers/editor-actions.helper";
 
@@ -22,6 +16,8 @@ type EditScreenProps = {
 
 const EditScreen: React.FC<EditScreenProps> = (props) => {
     const {raw} = props
+
+    const imagePlugin = createImagePlugin();
 
     const {setScreen} = React.useContext(ScreenContext)
     const contentEditorRef = React.useRef<any>(null)
@@ -121,12 +117,13 @@ const EditScreen: React.FC<EditScreenProps> = (props) => {
             <div
                 onClick={focusContent}
                 className={"h-full w-full overflow-y-auto"}>
-                <div className={"p-3"}>
+                <div className={"p-5"}>
                     <Editor
                         ref={contentEditorRef}
                         placeholder={"Veuillez taper quelque chose..."}
                         handleKeyCommand={handleKeyCommand}
                         customStyleMap={styleMap}
+                        plugins={[imagePlugin]}
                         blockStyleFn={blockStyleFn}
                         editorState={editorState}
                         onChange={setEditorState}/>

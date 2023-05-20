@@ -1,8 +1,8 @@
 import React from 'react';
-import {EditorState, Modifier, RichUtils} from "draft-js"
-import EditorActionsHelper, {ActionType} from "../../helpers/editor-actions.helper";
+import {AtomicBlockUtils, EditorState, Modifier, RichUtils} from "draft-js"
+import EditorActionsHelper, {ActionType, METHOD} from "../../helpers/editor-actions.helper";
 import EditorToolbarItem from "./editor-toolbar-item";
-import {linkDecorator} from "./link.decorator";
+import {linkDecorator} from "./decorators";
 
 type EditorToolbarProps = {
     editorState: EditorState,
@@ -11,6 +11,32 @@ type EditorToolbarProps = {
 
 const EditorToolbar: React.FC<EditorToolbarProps> = (props) => {
     const {editorState, setEditorState} = props
+
+    /**
+     * To add new image to the content editor
+     */
+    const addImage = React.useCallback(
+        () => {
+            console.log('Add image entity!')
+            const currentContent = editorState.getCurrentContent();
+            const contentStateWithEntity = currentContent.createEntity(
+                "IMAGE",
+                "IMMUTABLE",
+                {src: "http://localhost:5173/test-image.jpg"}
+            )
+            const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+            const newEditorState = EditorState.set(
+                editorState,
+                {currentContent: contentStateWithEntity}
+            );
+            setEditorState(AtomicBlockUtils.insertAtomicBlock(
+                newEditorState,
+                entityKey,
+                "IMAGE")
+            );
+        },
+        [editorState, setEditorState]
+    )
 
     /**
      * To add new link to the content editor
@@ -64,18 +90,21 @@ const EditorToolbar: React.FC<EditorToolbarProps> = (props) => {
     const clickHandler = React.useCallback(
         (item: ActionType) => {
             switch (item.method) {
-                case "block":
+                case METHOD.BLOCK:
                     setEditorState(RichUtils.toggleBlockType(editorState, item.style))
                     break
-                case "link":
+                case METHOD.LINK:
                     addLink()
+                    break
+                case METHOD.IMAGE:
+                    addImage()
                     break
                 default:
                     setEditorState(RichUtils.toggleInlineStyle(editorState, item.style))
                     break
             }
         },
-        [setEditorState, editorState, addLink]
+        [setEditorState, editorState, addLink, addImage]
     )
 
     return (

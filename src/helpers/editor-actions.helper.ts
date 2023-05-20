@@ -21,7 +21,8 @@ import {DraftStyleMap} from "draft-js";
 export enum METHOD {
     INLINE = "inline",
     BLOCK = "block",
-    LINK = "link"
+    LINK = "link",
+    IMAGE = "image"
 }
 
 export type ActionType = {
@@ -54,7 +55,7 @@ const EditorActionsHelper: ActionType[] = [
     {label: "H4", style: "header-four", method: METHOD.BLOCK, icon: "H4"},
     {label: "H5", style: "header-five", method: METHOD.BLOCK, icon: "H5"},
     {label: "H6", style: "header-six", method: METHOD.BLOCK, icon: "H6"},
-    {label: "Ajouter une image", style: "image", icon: faImage, method: METHOD.BLOCK},
+    {label: "Ajouter une image", style: "IMAGE", icon: faImage, method: METHOD.IMAGE},
     {label: "Ajouter un lien", style: "LINK", icon: faLink, method: METHOD.LINK},
 ];
 
