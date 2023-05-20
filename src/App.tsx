@@ -1,6 +1,7 @@
 import React, {createContext, useState} from "react"
 import './App.css'
 import 'draft-js/dist/Draft.css';
+import '@draft-js-plugins/image/lib/plugin.css';
 import HomeScreen from "./screens/home.screen";
 import EditScreen from "./screens/edit.screen";
 import StorageHelper from "./helpers/storage.helper";

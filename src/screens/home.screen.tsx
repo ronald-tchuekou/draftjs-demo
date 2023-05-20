@@ -1,9 +1,11 @@
 import React from "react"
-import {convertFromRaw, Editor, EditorState, RawDraftContentState} from "draft-js";
+import {convertFromRaw, EditorState, RawDraftContentState} from "draft-js";
+import Editor from '@draft-js-plugins/editor';
+import createImagePlugin from '@draft-js-plugins/image';
 import {ScreenContext, ScreenStack, StateContext} from "../App";
 import {faPenToSquare, faRefresh} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {linkDecorator} from "../components/editor-toolbar/link.decorator";
+import {linkDecorator} from "../components/editor-toolbar/decorators.tsx";
 import {blockStyleFn, styleMap} from "../helpers/editor-actions.helper.ts";
 
 type HomeScreenProps = {
@@ -12,6 +14,8 @@ type HomeScreenProps = {
 
 const HomeScreen: React.FC<HomeScreenProps> = (props) => {
     const {raw} = props
+
+    const imagePlugin = createImagePlugin();
 
     const {setScreen} = React.useContext(ScreenContext)
     const {refresh} = React.useContext(StateContext)
@@ -74,12 +78,13 @@ const HomeScreen: React.FC<HomeScreenProps> = (props) => {
                 </div>
             </div>
             <div className={"h-full w-full overflow-y-auto"}>
-                <div className={"p-3"}>
+                <div className={"p-5"}>
                     <Editor
                         readOnly
                         customStyleMap={styleMap}
                         blockStyleFn={blockStyleFn}
                         editorState={editorState}
+                        plugins={[imagePlugin]}
                         onChange={setEditorState}/>
                 </div>
             </div>
