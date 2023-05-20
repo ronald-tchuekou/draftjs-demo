@@ -1,4 +1,4 @@
-import React, {createContext, SetStateAction, useState} from "react"
+import React, {createContext, useState} from "react"
 import './App.css'
 import 'draft-js/dist/Draft.css';
 import HomeScreen from "./screens/home.screen";
@@ -11,12 +11,16 @@ export enum ScreenStack {
     EDIT = "EditScreen"
 }
 
-export const ScreenContext = createContext({
-    setScreen: React.Dispatch<SetStateAction<ScreenStack>>
+export const ScreenContext = createContext<{
+    setScreen: (screen: ScreenStack) => void
+}>({
+    setScreen: (s) => s
 })
 
-export const StateContext = createContext({
-    refresh: () => undefined
+export const StateContext = createContext<{
+    refresh: () => void
+}>({
+    refresh: () => null
 })
 
 function App() {
