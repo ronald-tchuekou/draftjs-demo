@@ -1,18 +1,13 @@
 import React from "react"
 import {faArrowLeft, faRefresh, faSave} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {getArticleById, updateArticle} from "../services/articles.service.ts";
-import {useParams} from "react-router-dom";
+import {createNewArticle} from "../services/articles.service.ts";
 import ArticleForm, {ArticleFormRef} from "../components/article-form.tsx";
-import ArticleModel from "../models/article.model.ts";
 
-const EditScreen: React.FC = () => {
+const AddScreen: React.FC = () => {
     const formRef = React.useRef<ArticleFormRef>(null)
 
-    const {article_id} = useParams()
-
     const [loading, setLoading] = React.useState<boolean>(false)
-    const [article, setArticle] = React.useState<ArticleModel | null>(null)
 
     const onBack = React.useCallback(
         () => {
@@ -33,7 +28,7 @@ const EditScreen: React.FC = () => {
 
             try {
                 setLoading(true)
-                const res = await updateArticle(article, article_id || "")
+                const res = await createNewArticle(article)
                 console.log(res)
                 setLoading(false)
             } catch (e) {
@@ -41,28 +36,7 @@ const EditScreen: React.FC = () => {
                 console.log(e)
             }
         },
-        [article_id, formRef]
-    )
-
-    React.useEffect(
-        () => {
-            (async () => {
-                if (!article_id)
-                    return;
-
-                setLoading(true)
-                const res: any = await getArticleById(article_id)
-                setLoading(false)
-
-                if (res.error) {
-                    console.log(res)
-                    return;
-                }
-
-                setArticle(res)
-            })()
-        },
-        [article_id]
+        []
     )
 
     return (
@@ -77,7 +51,7 @@ const EditScreen: React.FC = () => {
                             icon={faArrowLeft}/>
                     </button>
                     <div className={"text-xl font-bold"}>
-                        Modification
+                        Ajouter un article
                     </div>
                 </div>
                 <div className={"flex flex-row gap-3 items-center"}>
@@ -97,11 +71,9 @@ const EditScreen: React.FC = () => {
                     </button>
                 </div>
             </div>
-            <ArticleForm
-                ref={formRef}
-                article={article || undefined}/>
+            <ArticleForm ref={formRef}/>
         </div>
     )
 }
 
-export default EditScreen
+export default AddScreen

@@ -4,10 +4,31 @@
     box-sizing: border-box;
 }
 
-.icon-btn {
+html, body {
+    height: 100%
+}
+
+.loading {
+    animation: rotate 1500ms infinite;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg)
+    }
+    50% {
+        transform: rotate(180deg)
+    }
+    100% {
+        transform: rotate(360deg)
+    }
+}
+
+.icon-btn, .loading {
     transition: 300ms;
     @apply border rounded-full h-10 w-10 flex justify-center items-center text-gray-400
 }
+
 
 .icon-btn:hover {
     @apply border-gray-300 text-gray-600 bg-gray-200
