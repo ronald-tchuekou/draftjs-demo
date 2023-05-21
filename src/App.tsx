@@ -1,63 +1,29 @@
-import React, {createContext, useState} from "react"
+import React from "react"
 import './App.css'
 import 'draft-js/dist/Draft.css';
 import '@draft-js-plugins/image/lib/plugin.css';
 import HomeScreen from "./screens/home.screen";
 import EditScreen from "./screens/edit.screen";
-import StorageHelper from "./helpers/storage.helper";
-import {RawDraftContentState} from "draft-js";
+import {createBrowserRouter, RouterProvider} from "react-router-dom"
+import Loading from "./components/loading.tsx";
+import DetailsScreen from "./screens/details.scren.tsx";
+import AddScreen from "./screens/add.screen.tsx";
 
-export enum ScreenStack {
-    HOME = "HomeScreen",
-    EDIT = "EditScreen"
-}
-
-export const ScreenContext = createContext<{
-    setScreen: (screen: ScreenStack) => void
-}>({
-    setScreen: (s) => s
-})
-
-export const StateContext = createContext<{
-    refresh: () => void
-}>({
-    refresh: () => null
-})
+/**
+ * Route manager
+ */
+const router = createBrowserRouter([
+    {path: "/", Component: HomeScreen},
+    {path: "/add", Component: AddScreen},
+    {path: "/details/:article_id", Component: DetailsScreen},
+    {path: "/edit/:article_id", Component: EditScreen},
+])
 
 function App() {
-    const [screen, setScreen] = useState<ScreenStack>(ScreenStack.HOME)
-    const [raw, setRaw] = React.useState<RawDraftContentState | null>(
-        null
-    )
-
-    /**
-     * To refresh content
-     */
-    const refresh = React.useCallback(
-        () => {
-            setRaw(StorageHelper.getStoredContent())
-            return undefined
-        },
-        [setRaw]
-    )
-
-    React.useEffect(
-        () => {
-            refresh()
-        },
-        []
-    )
-
     return (
-        <ScreenContext.Provider value={{setScreen}}>
-            <StateContext.Provider value={{refresh}}>
-                {
-                    screen === ScreenStack.HOME
-                        ? <HomeScreen raw={raw}/>
-                        : <EditScreen raw={raw}/>
-                }
-            </StateContext.Provider>
-        </ScreenContext.Provider>
+        <RouterProvider
+            router={router}
+            fallbackElement={<Loading/>}/>
     )
 }
 
