@@ -22,7 +22,7 @@ const EditorToolbar: React.FC<EditorToolbarProps> = (props) => {
             const contentStateWithEntity = currentContent.createEntity(
                 "IMAGE",
                 "IMMUTABLE",
-                {src: "http://localhost:5173/test-image.jpg"}
+                {src: "/test-image.jpg"}
             )
             const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
             const newEditorState = EditorState.set(
