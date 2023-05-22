@@ -8,6 +8,7 @@
 import {
     addDoc,
     collection,
+    deleteDoc,
     doc,
     FirestoreDataConverter,
     getDoc,
@@ -108,6 +109,26 @@ export const getArticleById = async (article_id: string) => {
             .withConverter(articleConverter)
         const storeRef = await getDoc(docRef);
         return storeRef.data() || null
+    } catch (e: any) {
+        return {
+            error: true,
+            message: e.message,
+            stack: e
+        }
+    }
+}
+
+/**
+ * Method to delete article by id.
+ * @param article_id
+ */
+export const deleteArticle = async (article_id: string) => {
+    try {
+        const articlesCollection = collection(fireFirestore, COLLECTION_NAME)
+        const docRef = doc(articlesCollection, article_id)
+            .withConverter(articleConverter)
+        await deleteDoc(docRef);
+        return {}
     } catch (e: any) {
         return {
             error: true,
